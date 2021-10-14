@@ -10,6 +10,7 @@ def bubble_sort(array):
 
 def driver():
     A=[5,7,2,1,6,77,9]
+    B = [5,6,8,9,5,2,2]
     bubble_sort(A)         
     
 driver()
