@@ -9,7 +9,6 @@ def insertSort(A):
             j = j-1
         A[j+1] = key
 
-        
 A = [5, 7, -8, 9, 10,12, 4, -7, 0,-12, 1, 6, 2, 3, -4, -15]
 insertSort(A)
 print(A)
