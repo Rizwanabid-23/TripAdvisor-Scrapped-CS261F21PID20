@@ -2,16 +2,20 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
 import csv
+import sys
+from PyQt5.uic import loadUi
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMainWindow,QApplication,QComboBox,QHBoxLayout
 
 class hotel:
-    def __init__(self,name,price,reviews,rating,city,ranking,services):
+    def __init__(self,name,price,reviews,rating,city,services,ranking):
         self.name=name
         self.price=price
         self.reviews=reviews
         self.rating=rating
         self.city=city
-        self.ranking=ranking
         self.services=services
+        self.ranking=ranking
 
 driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
 driver.get("https://www.tripadvisor.com/Hotels")
@@ -37,9 +41,9 @@ for k in j.findAll('li',attrs={'class':'item'}):
         categories_2.append(get_href)
         categories_3.append(get_href_2)
         
-for j in range(0,len(categories)):
+for j in range(0,len(categories)-52):
     k = 0
-    for i in range(1,11):
+    for i in range(1,2):
         driver.get("https://www.tripadvisor.com/Hotels-"+ str(categories[j]) + "-oa"+ str(k) +str(categories_2[j]))
         k += 30
         city = categories_3[j]
@@ -86,15 +90,12 @@ for j in range(0,len(categories)):
             
             if hasattr(price,'text'):
                 price=price.text
-                print(price)
             
             if hasattr(services,'text'):
                 services=services.text
-                print(services)
             
             if hasattr(ranking,'text'):
                 ranking=ranking.text
-                print(ranking)
 
             h=hotel(*name,price,city,rating,reviews.text,services,ranking)
             array_list.append(h)
@@ -104,8 +105,54 @@ with open("hotels.csv", "w", newline='') as f:
     writer = csv.writer(f, delimiter=',')
     writer.writerow(header)
 for i in array_list:
-    data=[i.name,i.price,i.reviews,i.rating,i.city,i.ranking,i.services]
+    data=[i.name,i.price,i.reviews,i.rating,i.city,i.services,i.ranking]
     with open("hotels.csv", "a", newline='',encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         writer.writerow(data)
+        
+class sortwindow(QMainWindow):
+    def __init__(self):
+        super(sortWindow,self).__init__()
+        
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow,self).__init__()
+        loadUi("tripAdvisor.ui",self)
+        self.tableWidget.setColumnWidth(0,250)
+        self.tableWidget.setColumnWidth(6,250)
+        data_array=self.getdata()
+        self.loaddata(data_array)
+        
+    def getdata(self):  
+        data_array=[]
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv","r") as file:
+            reader=csv.reader(file)
+            for row in reader:
+                data_array.append(row)
+        return data_array
+        
+    def loaddata(self,data_array):
+        row=0
+        for i in data_array:
+            data=[{"Name":i[0],"Price":i[1],"Reviews":i[2],"Rating":i[3],"City":i[4],"Services":i[5],"Ranking":i[6]}]
+            self.tableWidget.setRowCount(len(data_array))
+            for person in data:
+                self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(person["Name"]))
+                self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(person["Price"]))
+                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(person["Reviews"]))
+                self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(person["Rating"]))
+                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(person["City"]))
+                self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(person["Services"]))
+                self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(person["Ranking"]))
+            row+=1
+    
+if QApplication.instance():
+    app = QApplication.instance()
+else:
+    app = QApplication(sys.argv)
+# app=QApplication(sys.argv)
+mainwindow=MainWindow()
+# widget=QMainWindow()
+mainwindow.show()
+app.exec_()
 
