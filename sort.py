@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_sortWindow(object):
     def setupUi(self, sortWindow):
         sortWindow.setObjectName("sortWindow")
-        sortWindow.resize(357, 322)
+        sortWindow.resize(289, 317)
         self.centralwidget = QtWidgets.QWidget(sortWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.sort_alogrithms = QtWidgets.QComboBox(self.centralwidget)
@@ -39,14 +39,11 @@ class Ui_sortWindow(object):
         self.plainTextEdit.setGeometry(QtCore.QRect(70, 190, 111, 21))
         self.plainTextEdit.setObjectName("plainTextEdit")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(90, 220, 75, 23))
+        self.pushButton_2.setGeometry(QtCore.QRect(90, 230, 75, 23))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(180, 220, 75, 23))
-        self.pushButton_3.setObjectName("pushButton_3")
         sortWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(sortWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 357, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 289, 21))
         self.menubar.setObjectName("menubar")
         sortWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(sortWindow)
@@ -65,7 +62,6 @@ class Ui_sortWindow(object):
         self.comboBox_2.setItemText(0, _translate("sortWindow", "Searching algorithms"))
         self.pushButton.setText(_translate("sortWindow", "Sort"))
         self.pushButton_2.setText(_translate("sortWindow", "Search"))
-        self.pushButton_3.setText(_translate("sortWindow", "Back"))
 
 
 if __name__ == "__main__":

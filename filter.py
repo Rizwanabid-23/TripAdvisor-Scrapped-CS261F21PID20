@@ -42,11 +42,8 @@ class Ui_filterWindow(object):
         self.plainTextEdit_2.setGeometry(QtCore.QRect(40, 110, 141, 21))
         self.plainTextEdit_2.setObjectName("plainTextEdit_2")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(40, 150, 75, 23))
+        self.pushButton.setGeometry(QtCore.QRect(80, 150, 75, 23))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(130, 150, 75, 23))
-        self.pushButton_2.setObjectName("pushButton_2")
         filterWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(filterWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 260, 21))
@@ -65,7 +62,6 @@ class Ui_filterWindow(object):
         self.label.setText(_translate("filterWindow", "Show items starting with:"))
         self.label_2.setText(_translate("filterWindow", "Show items ending  with:"))
         self.pushButton.setText(_translate("filterWindow", "Search"))
-        self.pushButton_2.setText(_translate("filterWindow", "Back"))
 
 
 if __name__ == "__main__":
