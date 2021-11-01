@@ -22,12 +22,11 @@ class hotel:
         self.city = city
         self.services = services
         self.ranking = ranking
-class WorkerThread(QThread,QMainWindow):    
-    
+class WorkerThread(QThread):    
     def run(self):
             QApplication.processEvents()
-            driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
-            #driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
+            #driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
+            driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
             driver.get("https://www.tripadvisor.com/Hotels")
             content = driver.page_source
             soup = BeautifulSoup(content)
@@ -51,20 +50,12 @@ class WorkerThread(QThread,QMainWindow):
                     categories.append(get_href_1)
                     categories_2.append(get_href)
                     categories_3.append(get_href_2)
-            bar=Ui_MainWindow()
-            value=0
-            bar.prog_bar(value)
             while stop_window != False:
-                
-                for j in range(0, len(categories)-52):
-                    value+=50
-                    
+                for j in range(0, len(categories)):
                     k = 0
-                    for i in range(1, 3):
+                    for i in range(1, 11):
                         driver.get("https://www.tripadvisor.com/Hotels-" + str(categories[j]) + "-oa" + str(k) + str(categories_2[j]))
                         k += 30
-                        bar.prog_bar(value)
-                        
                         while pause==True:
                             counter+=1
                         city = categories_3[j]
@@ -118,16 +109,12 @@ class WorkerThread(QThread,QMainWindow):
                         if stop_window == False:
                             break
                     if stop_window == False:
-                            break
+                        break
 
 class Ui_MainWindow(QWidget):
-    p_bar=QProgressBar
-    print(QProgressBar)
-    
     def setupUi(self, MainWindow):
-        
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1105, 550)
+        MainWindow.resize(1005, 526)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
@@ -159,12 +146,10 @@ class Ui_MainWindow(QWidget):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setObjectName("label")
-        #self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-       # self.progressBar.setGeometry(QtCore.QRect(790, 340, 191, 23))
-        #self.progressBar.setProperty("value", 0)
-       # self.progressBar.setObjectName("progressBar")
-       # self.p_bar=self.progressBar
-        #self.progressBar.setValue(50)
+        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar.setGeometry(QtCore.QRect(790, 340, 191, 23))
+        self.progressBar.setProperty("value", 24)
+        self.progressBar.setObjectName("progressBar")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(790, 410, 91, 16))
         font = QtGui.QFont()
@@ -174,46 +159,46 @@ class Ui_MainWindow(QWidget):
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(810, 160, 60, 23))
-        self.pushButton.setObjectName("pushButton")      
+        self.pushButton.setGeometry(QtCore.QRect(770, 140, 61, 23))
+        self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(900, 200, 60, 23))
+        self.pushButton_2.setGeometry(QtCore.QRect(850, 180, 61, 23))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(900, 160, 60, 23))
+        self.pushButton_3.setGeometry(QtCore.QRect(850, 140, 61, 23))
         self.pushButton_3.setObjectName("pushButton_3")
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(810, 200, 60, 23))
+        self.pushButton_4.setGeometry(QtCore.QRect(770, 180, 61, 23))
         self.pushButton_4.setObjectName("pushButton_4")
         self.ssButton = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton.setGeometry(QtCore.QRect(20, 40, 16, 16))
+        self.ssButton.setGeometry(QtCore.QRect(40, 30, 21, 21))
         self.ssButton.setObjectName("ssButton")
         self.ssButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_2.setGeometry(QtCore.QRect(130, 40, 16, 16))
+        self.ssButton_2.setGeometry(QtCore.QRect(150, 30, 21, 21))
         self.ssButton_2.setObjectName("ssButton_2")
         self.ssButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_3.setGeometry(QtCore.QRect(230, 40, 16, 16))
+        self.ssButton_3.setGeometry(QtCore.QRect(240, 30, 21, 20))
         self.ssButton_3.setObjectName("ssButton_3")
         self.ssButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_4.setGeometry(QtCore.QRect(330, 40, 16, 16))
+        self.ssButton_4.setGeometry(QtCore.QRect(326, 36, 20, 20))
         self.ssButton_4.setObjectName("ssButton_4")
         self.ssButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_5.setGeometry(QtCore.QRect(420, 40, 16, 16))
+        self.ssButton_5.setGeometry(QtCore.QRect(460, 30, 21, 21))
         self.ssButton_5.setObjectName("ssButton_5")
         self.ssButton_6 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_6.setGeometry(QtCore.QRect(520, 40, 16, 16))
+        self.ssButton_6.setGeometry(QtCore.QRect(530, 30, 21, 21))
         self.ssButton_6.setObjectName("ssButton_6")
         self.ssButton_7 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_7.setGeometry(QtCore.QRect(640, 40, 16, 16))
+        self.ssButton_7.setGeometry(QtCore.QRect(630, 30, 20, 20))
         self.ssButton_7.setObjectName("ssButton_7")
         self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(40, 40, 61, 16))
+        self.pushButton_5.setGeometry(QtCore.QRect(70, 30, 21, 21))
         self.pushButton_5.setObjectName("pushButton_5")
         self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_6.setGeometry(QtCore.QRect(250, 40, 61, 16))
+        self.pushButton_6.setGeometry(QtCore.QRect(270, 30, 21, 21))
         self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_7.setGeometry(QtCore.QRect(540, 40, 75, 16))
+        self.pushButton_7.setGeometry(QtCore.QRect(560, 30, 21, 21))
         self.pushButton_7.setObjectName("pushButton_7")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -223,6 +208,7 @@ class Ui_MainWindow(QWidget):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
 
         self.pushButton.clicked.connect(self.clicker)
         self.pushButton_3.clicked.connect(self.break_window)
@@ -238,20 +224,20 @@ class Ui_MainWindow(QWidget):
         self.ssButton_5.clicked.connect(self.sortedWindow_1)
         self.ssButton_6.clicked.connect(self.sortedWindow_1)
         self.ssButton_7.clicked.connect(self.sortedWindow_1)
-        self.prog_bar(0)
+        #self.prog_bar(0)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def prog_bar(self,value):
+    #def prog_bar(self,value):
         # self.bar = QProgressBar(self)
-        # print(value)
+        #print(value)
         # self.bar.setObjectName("progressBar")
         # self.bar.setGeometry(790, 440, 191, 23)      
         # self.bar.setValue(value)
         # self.bar.show()
-        self.p_bar.setObjectName("progressBar")
-        self.p_bar.setGeometry(790, 440, 191, 23)
-        self.p_bar.setValue(value)
+        #.p_bar.setObjectName("progressBar")
+        #self.p_bar.setGeometry(790, 440, 191, 23)
+        #self.p_bar.setValue(value)
         
         
     def clicker(self):
@@ -335,7 +321,6 @@ class Ui_MainWindow(QWidget):
         self.pushButton_5.setText(_translate("MainWindow", "Filter"))
         self.pushButton_6.setText(_translate("MainWindow", "Filter"))
         self.pushButton_7.setText(_translate("MainWindow", "Filter"))
-
 
 if __name__ == "__main__":
     import sys
