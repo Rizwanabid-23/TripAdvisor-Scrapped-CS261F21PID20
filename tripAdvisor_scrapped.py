@@ -7,8 +7,6 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QHBoxLayout, QPushButton, QProgressBar, QWidget
-from PyQt5 import QtCore, QtGui, QtWidgets
-import selenium
 from sort import Ui_sortWindow
 from filter import Ui_filterWindow
 stop_window = True
@@ -25,8 +23,8 @@ class hotel:
 class WorkerThread(QThread):    
     def run(self):
             QApplication.processEvents()
-            #driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
-            driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
+            driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
+            #driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
             driver.get("https://www.tripadvisor.com/Hotels")
             content = driver.page_source
             soup = BeautifulSoup(content)
@@ -111,10 +109,127 @@ class WorkerThread(QThread):
                     if stop_window == False:
                         break
 
-class Ui_MainWindow(QWidget):
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_sortWindow(object):
+    def setupUi(self,sortWindow):
+        sortWindow.setObjectName("sortWindow")
+        sortWindow.resize(308, 345)
+        self.centralwidget = QtWidgets.QWidget(sortWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.sort_alogrithms = QtWidgets.QComboBox(self.centralwidget)
+        self.sort_alogrithms.setGeometry(QtCore.QRect(70, 10, 141, 22))
+        self.sort_alogrithms.setObjectName("sort_alogrithms")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.setItemText(0, "Sorting algorithms")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.sort_alogrithms.addItem("")
+        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox.setGeometry(QtCore.QRect(70, 40, 141, 22))
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox.setGeometry(QtCore.QRect(90, 70, 70, 17))
+        self.checkBox.setObjectName("checkBox")
+        self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox_2.setGeometry(QtCore.QRect(70, 150, 111, 22))
+        self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(90, 100, 75, 23))
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(90, 230, 75, 23))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(70, 190, 141, 21))
+        self.lineEdit.setObjectName("lineEdit")
+        sortWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(sortWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 308, 21))
+        self.menubar.setObjectName("menubar")
+        sortWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(sortWindow)
+        self.statusbar.setObjectName("statusbar")
+        sortWindow.setStatusBar(self.statusbar)
+        
+        self.pushButton.clicked.connect(self.get_data)
+
+        self.retranslateUi(sortWindow)
+        QtCore.QMetaObject.connectSlotsByName(sortWindow)
+    def get_data(self):
+        
+        x = self.sort_alogrithms.currentText()
+        y = self.comboBox.currentText()
+        print(x+"  "+y)
+        sort=sorting()
+        data_array=Ui_MainWindow()
+        arr=data_array.getdata()
+        if button_name=="ssButton":
+            if x=="Insertion Sort":
+                sort.insert_sort(arr[0],y)
+
+
+    def retranslateUi(self, sortWindow):
+        _translate = QtCore.QCoreApplication.translate
+        sortWindow.setWindowTitle(_translate("sortWindow", "MainWindow"))
+        self.sort_alogrithms.setItemText(1, _translate("sortWindow", "Insertion Sort"))
+        self.sort_alogrithms.setItemText(2, _translate("sortWindow", "Merge Sort"))
+        self.sort_alogrithms.setItemText(3, _translate("sortWindow", "Selection Sort"))
+        self.sort_alogrithms.setItemText(4, _translate("sortWindow", "Bubble Sort"))
+        self.sort_alogrithms.setItemText(5, _translate("sortWindow", "Quick Sort"))
+        self.sort_alogrithms.setItemText(6, _translate("sortWindow", "Counting Sort"))
+        self.sort_alogrithms.setItemText(7, _translate("sortWindow", "Heap Sort"))
+        self.sort_alogrithms.setItemText(8, _translate("sortWindow", "Cycle Sort"))
+        self.sort_alogrithms.setItemText(9, _translate("sortWindow", "Radix Sort"))
+        self.sort_alogrithms.setItemText(10, _translate("sortWindow", "Shell Sort"))
+        self.sort_alogrithms.setItemText(11, _translate("sortWindow", "Bucket Sort"))
+        self.comboBox.setItemText(0, _translate("sortWindow", "Ascend / Descend"))
+        self.comboBox.setItemText(1, _translate("sortWindow", "Ascending"))
+        self.comboBox.setItemText(2, _translate("sortWindow", "Descending"))
+        self.checkBox.setText(_translate("sortWindow", "Multi sort"))
+        self.comboBox_2.setItemText(0, _translate("sortWindow", "Searching algorithms"))
+        self.comboBox_2.setItemText(1, _translate("sortWindow", "Linear Search"))
+        self.comboBox_2.setItemText(2, _translate("sortWindow", "Binary Search"))
+        self.comboBox_2.setItemText(3, _translate("sortWindow", "Jump Search"))
+        self.pushButton.setText(_translate("sortWindow", "Sort"))
+        self.pushButton_2.setText(_translate("sortWindow", "Search"))
+
+
+class sorting:
+    def insert_sort(self,arr,type):
+        if type=="Ascending":
+            n = len(arr)
+            for i in range(1,n):
+                key = arr[i]
+                j = i-1
+                while j>=0 and  arr[j] > key:
+                    arr[j+1] = arr[j]
+                    j = j-1
+                arr[j+1] = key
+        
+        table=Ui_MainWindow()
+        table.name_column(arr)
+            
+class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1005, 526)
+        MainWindow.resize(1000, 525)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
@@ -209,7 +324,8 @@ class Ui_MainWindow(QWidget):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.pushButton.clicked.connect(self.clicker)
         self.pushButton_3.clicked.connect(self.break_window)
         self.pushButton_2.clicked.connect(self.pause_window)
@@ -227,7 +343,8 @@ class Ui_MainWindow(QWidget):
         #self.prog_bar(0)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        data=self.getdata()
+        self.loaddata(data)
     #def prog_bar(self,value):
         # self.bar = QProgressBar(self)
         #print(value)
@@ -239,6 +356,14 @@ class Ui_MainWindow(QWidget):
         #self.p_bar.setGeometry(790, 440, 191, 23)
         #self.p_bar.setValue(value)
         
+    def name_column(self,arr):
+        row=0
+        for i in arr:
+            data = [{"Name": i[0]}]
+            self.tableWidget.setRowCount(len(arr))
+            for person in data:
+                self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(person["Name"]))
+            row +=1
         
     def clicker(self):
         global stop_window
@@ -256,6 +381,8 @@ class Ui_MainWindow(QWidget):
         pause=False
     def sortedWindow_1(self):
         self.sortWindow = QtWidgets.QMainWindow()
+        global button_name
+        button_name=self.ssButton.objectName()
         self.ui = Ui_sortWindow()
         self.ui.setupUi(self.sortWindow)
         self.sortWindow.show()
@@ -266,7 +393,8 @@ class Ui_MainWindow(QWidget):
         self.filterWindow.show()
     def getdata(self):
         data_array = []
-        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\data.csv", "r") as file:
+        #with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\data.csv", "r") as file:
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 data_array.append(row)
@@ -286,7 +414,6 @@ class Ui_MainWindow(QWidget):
                 self.tableWidget.setItem(row, 5, QtWidgets.QTableWidgetItem(person["Services"]))
                 self.tableWidget.setItem(row, 6, QtWidgets.QTableWidgetItem(person["Ranking"]))
             row += 1
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -311,16 +438,17 @@ class Ui_MainWindow(QWidget):
         self.pushButton_2.setText(_translate("MainWindow", "Pause"))
         self.pushButton_3.setText(_translate("MainWindow", "Stop"))
         self.pushButton_4.setText(_translate("MainWindow", "Resume"))
-        self.ssButton.setText(_translate("MainWindow", "PushButton"))
-        self.ssButton_2.setText(_translate("MainWindow", "PushButton"))
-        self.ssButton_3.setText(_translate("MainWindow", "PushButton"))
-        self.ssButton_4.setText(_translate("MainWindow", "PushButton"))
-        self.ssButton_5.setText(_translate("MainWindow", "PushButton"))
-        self.ssButton_6.setText(_translate("MainWindow", "PushButton"))
-        self.ssButton_7.setText(_translate("MainWindow", "PushButton"))
-        self.pushButton_5.setText(_translate("MainWindow", "Filter"))
-        self.pushButton_6.setText(_translate("MainWindow", "Filter"))
-        self.pushButton_7.setText(_translate("MainWindow", "Filter"))
+        self.ssButton.setText(_translate("MainWindow", "S"))
+        self.ssButton_2.setText(_translate("MainWindow", "S"))
+        self.ssButton_3.setText(_translate("MainWindow", "S"))
+        self.ssButton_4.setText(_translate("MainWindow", "S"))
+        self.ssButton_5.setText(_translate("MainWindow", "S"))
+        self.ssButton_6.setText(_translate("MainWindow", "S"))
+        self.ssButton_7.setText(_translate("MainWindow", "S"))
+        self.pushButton_5.setText(_translate("MainWindow", "F"))
+        self.pushButton_6.setText(_translate("MainWindow", "F"))
+        self.pushButton_7.setText(_translate("MainWindow", "F"))
+
 
 if __name__ == "__main__":
     import sys
