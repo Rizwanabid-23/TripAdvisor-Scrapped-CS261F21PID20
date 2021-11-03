@@ -7,6 +7,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QHBoxLayout, QPushButton, QProgressBar, QWidget
+from PyQt5 import QtCore, QtGui, QtWidgets
 from sort import Ui_sortWindow
 from filter import Ui_filterWindow
 stop_window = True
@@ -110,7 +111,7 @@ class WorkerThread(QThread):
                         break
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_sortWindow(object):
     def setupUi(self,sortWindow):
@@ -172,19 +173,22 @@ class Ui_sortWindow(object):
 
         self.retranslateUi(sortWindow)
         QtCore.QMetaObject.connectSlotsByName(sortWindow)
-    def get_data(self):
-        
+    def get_data(self):        
         x = self.sort_alogrithms.currentText()
         y = self.comboBox.currentText()
-        print(x+"  "+y)
-        sort=sorting()
+        sorted_arr = []
+        sort = sorting()
         data_array=Ui_MainWindow()
         arr=data_array.getdata()
         if button_name=="ssButton":
+            self.header = ["Name"]
+            sort.Key = 0
             if x=="Insertion Sort":
-                sort.insert_sort(arr[0],y)
+                sorted_arr = sort.insert_sort(arr,y)
 
-
+                
+        # table=Ui_MainWindow()
+        # table.loaddata(sorted_arr)
     def retranslateUi(self, sortWindow):
         _translate = QtCore.QCoreApplication.translate
         sortWindow.setWindowTitle(_translate("sortWindow", "MainWindow"))
@@ -215,16 +219,14 @@ class sorting:
     def insert_sort(self,arr,type):
         if type=="Ascending":
             n = len(arr)
-            for i in range(1,n):
+            for i in range(0,n):
                 key = arr[i]
                 j = i-1
                 while j>=0 and  arr[j] > key:
                     arr[j+1] = arr[j]
                     j = j-1
                 arr[j+1] = key
-        
-        table=Ui_MainWindow()
-        table.name_column(arr)
+            return (arr)
             
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -364,7 +366,7 @@ class Ui_MainWindow(object):
             for person in data:
                 self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(person["Name"]))
             row +=1
-        
+
     def clicker(self):
         global stop_window
         stop_window = True
@@ -393,8 +395,8 @@ class Ui_MainWindow(object):
         self.filterWindow.show()
     def getdata(self):
         data_array = []
-        #with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\data.csv", "r") as file:
-        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 data_array.append(row)
