@@ -1,3 +1,4 @@
+from os import name
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -7,20 +8,22 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QHBoxLayout, QPushButton, QProgressBar, QWidget
-from PyQt5 import QtCore, QtGui, QtWidgets
 from sort import Ui_sortWindow
 from filter import Ui_filterWindow
 stop_window = True
 pause=False
+button_name=""
+button_price=""
+button_city=""
+button_ranking=""
+button_rating=""
+button_review=""
+button_services=""
 class hotel:
-    def __init__(self, name, price, reviews, rating, city, services, ranking):
-        self.name = name
-        self.price = price
-        self.reviews = reviews
-        self.rating = rating
-        self.city = city
-        self.services = services
-        self.ranking = ranking
+    array_list=[]
+    def __init__(self, name, price, city, rating, reviews, services, ranking):
+        self.array_list=[name,price,city,rating,reviews,services,ranking]
+
 class WorkerThread(QThread):    
     def run(self):
             QApplication.processEvents()
@@ -110,13 +113,14 @@ class WorkerThread(QThread):
                     if stop_window == False:
                         break
 
-
-
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_sortWindow(object):
-    def setupUi(self,sortWindow):
+    def setupUi(self,sortWindow, ui_window):
         sortWindow.setObjectName("sortWindow")
         sortWindow.resize(308, 345)
+        self.ui_window = ui_window
+        ui_window.set_sort_window(self)
         self.centralwidget = QtWidgets.QWidget(sortWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.sort_alogrithms = QtWidgets.QComboBox(self.centralwidget)
@@ -168,27 +172,58 @@ class Ui_sortWindow(object):
         self.statusbar = QtWidgets.QStatusBar(sortWindow)
         self.statusbar.setObjectName("statusbar")
         sortWindow.setStatusBar(self.statusbar)
+  
+        self.pushButton.clicked.connect(self.caller_name)
         
-        self.pushButton.clicked.connect(self.get_data)
-
         self.retranslateUi(sortWindow)
         QtCore.QMetaObject.connectSlotsByName(sortWindow)
-    def get_data(self):        
+        
+    def caller_name(self):
+        if button_name=="ssButton":
+            self.ui_window.name_column(0)
+        elif button_price=="ssButton_2":
+            self.ui_window.name_column(1)
+        elif button_city=="ssButton_3":
+            self.ui_window.name_column(2)
+        elif button_rating=="ssButton_4":
+            self.ui_window.name_column(3)
+        elif button_review=="ssButton_5":
+            self.ui_window.name_column(4)
+        elif button_services=="ssButton_6":
+            self.ui_window.name_column(5)
+        elif button_ranking=="ssButton_7":
+            self.ui_window.name_column(6)
+        
+    def call_method(self):
         x = self.sort_alogrithms.currentText()
         y = self.comboBox.currentText()
-        sorted_arr = []
-        sort = sorting()
-        data_array=Ui_MainWindow()
-        arr=data_array.getdata()
+        sort=sorting()
+        arr=self.ui_window.getClassicData()
+        
         if button_name=="ssButton":
-            self.header = ["Name"]
-            sort.Key = 0
             if x=="Insertion Sort":
-                sorted_arr = sort.insert_sort(arr,y)
+                sorted_array=sort.insert_sort(arr,0,y)
+        elif button_price=="ssButton_2":
+            if x=="Insertion Sort":
+                sorted_array=sort.insert_sort(arr,1,y)
+        elif button_city=="ssButton_3":
+            if x=="Insertion Sort":
+                sorted_array=sort.insert_sort(arr,2,y)
+        elif button_rating=="ssButton_4":
+            if x=="Insertion Sort":
+                sorted_array=sort.insert_sort(arr,3,y)
+        elif button_review=="ssButton_5":
+            if x=="Insertion Sort":
+                sorted_array=sort.insert_sort(arr,4,y)  
+        elif button_services=="ssButton_6":
+            if x=="Insertion Sort":
+                sorted_array=sort.insert_sort(arr,5,y) 
+        elif button_ranking=="ssButton_7":
+            if x=="Insertion Sort":
+                sorted_array=sort.insert_sort(arr,6,y)  
+        print("==")
+        return sorted_array
 
-                
-        # table=Ui_MainWindow()
-        # table.loaddata(sorted_arr)
     def retranslateUi(self, sortWindow):
         _translate = QtCore.QCoreApplication.translate
         sortWindow.setWindowTitle(_translate("sortWindow", "MainWindow"))
@@ -214,21 +249,40 @@ class Ui_sortWindow(object):
         self.pushButton.setText(_translate("sortWindow", "Sort"))
         self.pushButton_2.setText(_translate("sortWindow", "Search"))
 
-
 class sorting:
-    def insert_sort(self,arr,type):
+    def get_indices(self,sorted_array,unsorted_array,value):
+        indices=[]
+        for i in range(0,len(sorted_array)):
+            sorted_value=sorted_array[i].name
+            for j in range(0,len(unsorted_array)):
+                if sorted_value==unsorted_array[j].name:
+                    indices.append(j)
+        return indices
+        
+    def insert_sort(self,arr,col,type):
         if type=="Ascending":
             n = len(arr)
-            for i in range(0,n):
-                key = arr[i]
+            for i in range(1,n):
+                key = arr[i].array_list[col]
+                keys=arr[i]
                 j = i-1
-                while j>=0 and  arr[j] > key:
+                while j>=0 and  (arr[j].array_list[col]) > key: 
                     arr[j+1] = arr[j]
                     j = j-1
-                arr[j+1] = key
-            return (arr)
-            
+                arr[j+1] = keys
+     #   array_indices=self.get_indices(arr,indices,value)
+        return arr
+        
 class Ui_MainWindow(object):
+    global button_name
+    global button_city
+    global button_price
+    global button_ranking
+    global button_rating
+    global button_ranking
+    global button_services
+    def set_sort_window(self, sort_window):
+        self.sort_window = sort_window
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1000, 525)
@@ -336,12 +390,12 @@ class Ui_MainWindow(object):
         self.pushButton_6.clicked.connect(self.searchWindow_1)
         self.pushButton_7.clicked.connect(self.searchWindow_1)
         self.ssButton.clicked.connect(self.sortedWindow_1)
-        self.ssButton_2.clicked.connect(self.sortedWindow_1)
-        self.ssButton_3.clicked.connect(self.sortedWindow_1)
-        self.ssButton_4.clicked.connect(self.sortedWindow_1)
-        self.ssButton_5.clicked.connect(self.sortedWindow_1)
-        self.ssButton_6.clicked.connect(self.sortedWindow_1)
-        self.ssButton_7.clicked.connect(self.sortedWindow_1)
+        self.ssButton_2.clicked.connect(self.sortedWindow_2)
+        self.ssButton_3.clicked.connect(self.sortedWindow_3)
+        self.ssButton_4.clicked.connect(self.sortedWindow_4)
+        self.ssButton_5.clicked.connect(self.sortedWindow_5)
+        self.ssButton_6.clicked.connect(self.sortedWindow_6)
+        self.ssButton_7.clicked.connect(self.sortedWindow_7)
         #self.prog_bar(0)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -357,21 +411,28 @@ class Ui_MainWindow(object):
         #.p_bar.setObjectName("progressBar")
         #self.p_bar.setGeometry(790, 440, 191, 23)
         #self.p_bar.setValue(value)
-        
-    def name_column(self,arr):
+    def name_column(self,col):
         row=0
+        arr=self.sort_window.call_method()
+        self.tableWidget.setRowCount(len(arr))         
         for i in arr:
-            data = [{"Name": i[0]}]
-            self.tableWidget.setRowCount(len(arr))
+            data=[{"Name": i.array_list[0],"Price":i.array_list[1], "City":i.array_list[2],
+                    "Rating":i.array_list[3], "Reviews":i.array_list[4], "Services":i.array_list[5], "Ranking":i.array_list[6]}]
             for person in data:
                 self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(person["Name"]))
-            row +=1
-
+                self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(person["Price"]))
+                self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(person["City"]))
+                self.tableWidget.setItem(row, 3, QtWidgets.QTableWidgetItem(person["Rating"]))
+                self.tableWidget.setItem(row, 4, QtWidgets.QTableWidgetItem(person["Reviews"]))
+                self.tableWidget.setItem(row, 5, QtWidgets.QTableWidgetItem(person["Services"]))
+                self.tableWidget.setItem(row, 6, QtWidgets.QTableWidgetItem(person["Ranking"]))
+            row += 1
+        
     def clicker(self):
         global stop_window
         stop_window = True
         self.worker = WorkerThread()
-        self.worker.start()
+        self.worker.start()   
     def break_window(self):
         global stop_window
         stop_window = False
@@ -383,36 +444,112 @@ class Ui_MainWindow(object):
         pause=False
     def sortedWindow_1(self):
         self.sortWindow = QtWidgets.QMainWindow()
-        global button_name
-        button_name=self.ssButton.objectName()
+      #  global button_name
+        self.button_name=self.ssButton.objectName()
+        print(button_name)
+        self.button_price=None
+        self.button_city=None
+        self.button_ranking=None
+        self.button_rating=None
+        self.button_review=None
+        self.button_services=None
+        
         self.ui = Ui_sortWindow()
-        self.ui.setupUi(self.sortWindow)
+        self.ui.setupUi(self.sortWindow, self)
+        self.sortWindow.show()
+    def sortedWindow_2(self):
+        self.sortWindow = QtWidgets.QMainWindow()
+        button_price=self.ssButton_2.objectName()
+        print(button_price)
+        self.button_name=None
+        self.button_city=None
+        self.button_ranking=None
+        self.button_rating=None
+        self.button_review=None
+        self.button_services=None
+        self.ui = Ui_sortWindow()
+        self.ui.setupUi(self.sortWindow, self)
+        self.sortWindow.show()
+    def sortedWindow_3(self):
+        self.sortWindow = QtWidgets.QMainWindow()
+        button_city=self.ssButton_3.objectName()
+        print(button_city)
+        self.button_price=None
+        self.button_name=None
+        self.button_ranking=None
+        self.button_rating=None
+        self.button_review=None
+        self.button_services=None
+        
+        self.ui = Ui_sortWindow()
+        self.ui.setupUi(self.sortWindow, self)
+        self.sortWindow.show()
+    def sortedWindow_4(self):
+        self.sortWindow = QtWidgets.QMainWindow()
+        global button_rating
+        button_rating=self.ssButton_4.objectName()
+        print(button_rating)
+        self.ui = Ui_sortWindow()
+        self.ui.setupUi(self.sortWindow, self)
+        self.sortWindow.show()
+    def sortedWindow_5(self):
+        self.sortWindow = QtWidgets.QMainWindow()
+        global button_review
+        button_review=self.ssButton_5.objectName()
+        print(button_review)
+        self.ui = Ui_sortWindow()
+        self.ui.setupUi(self.sortWindow, self)
+        self.sortWindow.show()
+    def sortedWindow_6(self):
+        self.sortWindow = QtWidgets.QMainWindow()
+        global button_services
+        button_services=self.ssButton_6.objectName()
+        print(button_services)
+        self.ui = Ui_sortWindow()
+        self.ui.setupUi(self.sortWindow, self)
+        self.sortWindow.show()
+    def sortedWindow_7(self):
+        self.sortWindow = QtWidgets.QMainWindow()
+        global button_ranking
+        button_ranking=self.ssButton_7.objectName()
+        print(button_ranking)
+        self.ui = Ui_sortWindow()
+        self.ui.setupUi(self.sortWindow, self)
         self.sortWindow.show()
     def searchWindow_1(self):
+        
         self.filterWindow = QtWidgets.QMainWindow()
         self.ui = Ui_filterWindow()
         self.ui.setupUi(self.filterWindow)
         self.filterWindow.show()
     def getdata(self):
         data_array = []
-        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\data.csv", "r") as file:
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 data_array.append(row)
         return data_array
+    def getClassicData(self):
+        data_array = []
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                c=hotel(row[0],row[1],row[2],row[3],row[4],row[5],row[6])
+                data_array.append(c)
+        return data_array
     def loaddata(self,data_array):
         row = 0
         for i in data_array:
-            data = [{"Name": i[0], "Price":i[1], "Reviews":i[2],
-                     "Rating":i[3], "City":i[4], "Services":i[5], "Ranking":i[6]}]
+            data = [{"Name": i[0], "Price":i[1], "City":i[2],
+                     "Rating":i[3], "Reviews":i[4], "Services":i[5], "Ranking":i[6]}]
             self.tableWidget.setRowCount(len(data_array))
             for person in data:
                 self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(person["Name"]))
                 self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(person["Price"]))
-                self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(person["Reviews"]))
+                self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(person["City"]))
                 self.tableWidget.setItem(row, 3, QtWidgets.QTableWidgetItem(person["Rating"]))
-                self.tableWidget.setItem(row, 4, QtWidgets.QTableWidgetItem(person["City"]))
+                self.tableWidget.setItem(row, 4, QtWidgets.QTableWidgetItem(person["Reviews"]))
                 self.tableWidget.setItem(row, 5, QtWidgets.QTableWidgetItem(person["Services"]))
                 self.tableWidget.setItem(row, 6, QtWidgets.QTableWidgetItem(person["Ranking"]))
             row += 1
