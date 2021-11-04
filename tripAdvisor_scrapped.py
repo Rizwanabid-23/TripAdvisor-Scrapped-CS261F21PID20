@@ -21,8 +21,6 @@ button_ranking = ""
 button_rating = ""
 button_review = ""
 button_services = ""
-
-
 class hotel:
     array_list = []
 
@@ -34,9 +32,8 @@ class hotel:
 class WorkerThread(QThread):
     def run(self):
         QApplication.processEvents()
-        driver = webdriver.Chrome(
-            executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
-        #driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
+        #driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
+        driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
         driver.get("https://www.tripadvisor.com/Hotels")
         content = driver.page_source
         soup = BeautifulSoup(content)
@@ -194,6 +191,7 @@ class Ui_sortWindow(object):
         sortWindow.setStatusBar(self.statusbar)
 
         self.pushButton.clicked.connect(self.caller_name)
+        self.pushButton_2.clicked.connect(self.caller_name_1)
 
         self.retranslateUi(sortWindow)
         QtCore.QMetaObject.connectSlotsByName(sortWindow)
@@ -213,15 +211,75 @@ class Ui_sortWindow(object):
             self.ui_window.name_column(5)
         elif button_ranking == "ssButton_7":
             self.ui_window.name_column(6)
+    def caller_name_1(self):
+        if button_name == "ssButton":
+            self.ui_window.name_column_1(0)
+        elif button_price == "ssButton_2":
+            self.ui_window.name_column_1(1)
+        elif button_city == "ssButton_3":
+            self.ui_window.name_column_1(2)
+        elif button_rating == "ssButton_4":
+            self.ui_window.name_column_1(3)
+        elif button_review == "ssButton_5":
+            self.ui_window.name_column_1(4)
+        elif button_services == "ssButton_6":
+            self.ui_window.name_column_1(5)
+        elif button_ranking == "ssButton_7":
+            self.ui_window.name_column_1(6)
+    def call_method_1(self):
+        x_1 = self.comboBox_2.currentText()
+        y_1 = self.lineEdit.text()
+        search = searching()
+        arr_1 = self.ui_window.getClassicData()
+        q_1 = len(arr_1) - 1
+        if button_name == "ssButton":
+            if x_1 == "Linear Search":
+                searched_array = search.linear_search(arr_1, 0, y_1)
+            elif x_1 == "Binary Search":
+                searched_array = search.binary_search(arr_1, 0, y_1,0,q_1)
+            elif x_1 == "Jump Search":
+                searched_array = search.jump_search(arr_1, 0, y_1)
+        elif button_price == "ssButton_2":
+            if x_1 == "Linear Search":
+                searched_array = search.linear_search(arr_1, 1, y_1)
+            elif x_1 == "Binary Search":
+                searched_array = search.binary_search(arr_1, 1, y_1,0,q_1)
+        elif button_city == "ssButton_3":
+            if x_1 == "Linear Search":
+                searched_array = search.linear_search(arr_1, 2, y_1)
+            elif x_1 == "Binary Search":
+                searched_array = search.binary_search(arr_1, 2, y_1,0,q_1)
+        elif button_rating == "ssButton_4":
+            if x_1 == "Linear Search":
+                searched_array = search.linear_search(arr_1, 3, y_1)
+            elif x_1 == "Binary Search":
+                searched_array = search.linear_searchbinary_search(arr_1, 3, y_1,0,q_1)
+        elif button_review == "ssButton_5":
+            if x_1 == "Linear Search":
+                searched_array = search.linear_search(arr_1, 4, y_1)
+            elif x_1 == "Binary Search":
+                searched_array = search.binary_search(arr_1, 4, y_1,0,q_1)        
+        elif button_services == "ssButton_6":
+            if x_1 == "Linear Search":
+                searched_array = search.linear_search(arr_1, 5, y_1)
+            elif x_1 == "Binary Search":
+                searched_array = search.linear_searchbinary_search(arr_1, 5, y_1,0,q_1)
+        elif button_ranking == "ssButton_7":
+            if x_1 == "Linear Search":
+                searched_array = search.linear_search(arr_1, 6, y_1)
+            elif x_1 == "Binary Search":
+                searched_array = search.binary_search(arr_1, 6, y_1,0,q_1)
+        print("==")
+        return searched_array
 
+
+        
     def call_method(self):
         x = self.sort_alogrithms.currentText()
         y = self.comboBox.currentText()
-
         sort = sorting()
         arr = self.ui_window.getClassicData()
         q = len(arr) - 1
-
         if button_name == "ssButton":
             if x == "Insertion Sort":
                 sorted_array = sort.insert_sort(arr, 0, y)
@@ -374,7 +432,28 @@ class Ui_sortWindow(object):
         self.pushButton.setText(_translate("sortWindow", "Sort"))
         self.pushButton_2.setText(_translate("sortWindow", "Search"))
 
-
+class searching:
+    def linear_search(self, arr, col,find_element):
+        get_element = []
+        for i in range(0,len(arr)):
+            if arr[i].array_list[col] == find_element:
+                element = arr[i]
+                get_element.append(element)
+        return get_element
+    
+    def binary_search(self, arr, col,find_element,left,right):
+        get_element = []
+        mid_1 = 0
+        if right >= left:
+            mid_1 = (right + left) // 2
+        if arr[mid_1].array_list[col] == find_element:
+            element = arr[mid_1]
+            get_element.append(element)
+        elif arr[mid_1].array_list[col] > find_element:
+            return self.binary_search(arr,col,find_element,left, mid_1 - 1)
+        else:
+            return self.binary_search(arr,col,find_element,mid_1 + 1,right)
+        return get_element
 class sorting:
     def insert_sort(self, arr, col, type):
         if type == "Ascending":
@@ -552,6 +631,7 @@ class sorting:
                         arr[j] = arr[j+1]
                         arr[j+1] = temp
         return arr
+    
 
     def heap_sort(self, arr, col, type):
         n = len(arr)
@@ -711,7 +791,6 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.pushButton.clicked.connect(self.clicker)
@@ -767,7 +846,30 @@ class Ui_MainWindow(object):
                 self.tableWidget.setItem(
                     row, 6, QtWidgets.QTableWidgetItem(person["Ranking"]))
             row += 1
-
+    def name_column_1(self, col):
+        row = 0
+        arr_1 = self.sort_window.call_method_1()
+        print(arr_1)
+        self.tableWidget.setRowCount(len(arr_1))
+        for i in arr_1:
+            data = [{"Name": i.array_list[0], "Price":i.array_list[1], "City":i.array_list[2],
+                     "Rating":i.array_list[3], "Reviews":i.array_list[4], "Services":i.array_list[5], "Ranking":i.array_list[6]}]
+            for person in data:
+                self.tableWidget.setItem(
+                    row, 0, QtWidgets.QTableWidgetItem(person["Name"]))
+                self.tableWidget.setItem(
+                    row, 1, QtWidgets.QTableWidgetItem(person["Price"]))
+                self.tableWidget.setItem(
+                    row, 2, QtWidgets.QTableWidgetItem(person["City"]))
+                self.tableWidget.setItem(
+                    row, 3, QtWidgets.QTableWidgetItem(person["Rating"]))
+                self.tableWidget.setItem(
+                    row, 4, QtWidgets.QTableWidgetItem(person["Reviews"]))
+                self.tableWidget.setItem(
+                    row, 5, QtWidgets.QTableWidgetItem(person["Services"]))
+                self.tableWidget.setItem(
+                    row, 6, QtWidgets.QTableWidgetItem(person["Ranking"]))
+            row += 1
     def clicker(self):
         global stop_window
         stop_window = True
@@ -857,8 +959,8 @@ class Ui_MainWindow(object):
 
     def getdata(self):
         data_array = []
-       # with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 data_array.append(row)
@@ -866,8 +968,8 @@ class Ui_MainWindow(object):
 
     def getClassicData(self):
         data_array = []
-       # with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 c = hotel(row[0], row[1], row[2],

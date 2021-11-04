@@ -58,14 +58,9 @@ class Ui_sortWindow(object):
         self.statusbar.setObjectName("statusbar")
         sortWindow.setStatusBar(self.statusbar)
         self.pushButton.clicked.connect(self.get_data)
-
         self.retranslateUi(sortWindow)
         QtCore.QMetaObject.connectSlotsByName(sortWindow)
-    def get_data(self):
-        x = self.sort_alogrithms.currentText()
-        y = self.comboBox.currentText()
-
-
+        
     def retranslateUi(self, sortWindow):
         _translate = QtCore.QCoreApplication.translate
         sortWindow.setWindowTitle(_translate("sortWindow", "MainWindow"))
