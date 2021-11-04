@@ -32,8 +32,8 @@ class hotel:
 class WorkerThread(QThread):
     def run(self):
         QApplication.processEvents()
-        #driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
-        driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
+        driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
+        #driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
         driver.get("https://www.tripadvisor.com/Hotels")
         content = driver.page_source
         soup = BeautifulSoup(content)
@@ -253,7 +253,7 @@ class Ui_sortWindow(object):
             if x_1 == "Linear Search":
                 searched_array = search.linear_search(arr_1, 3, y_1)
             elif x_1 == "Binary Search":
-                searched_array = search.linear_searchbinary_search(arr_1, 3, y_1,0,q_1)
+                searched_array = search.binary_search(arr_1, 3, y_1,0,q_1)
         elif button_review == "ssButton_5":
             if x_1 == "Linear Search":
                 searched_array = search.linear_search(arr_1, 4, y_1)
@@ -263,7 +263,7 @@ class Ui_sortWindow(object):
             if x_1 == "Linear Search":
                 searched_array = search.linear_search(arr_1, 5, y_1)
             elif x_1 == "Binary Search":
-                searched_array = search.linear_searchbinary_search(arr_1, 5, y_1,0,q_1)
+                searched_array = search.binary_search(arr_1, 5, y_1,0,q_1)
         elif button_ranking == "ssButton_7":
             if x_1 == "Linear Search":
                 searched_array = search.linear_search(arr_1, 6, y_1)
@@ -959,8 +959,8 @@ class Ui_MainWindow(object):
 
     def getdata(self):
         data_array = []
-        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 data_array.append(row)
@@ -968,8 +968,8 @@ class Ui_MainWindow(object):
 
     def getClassicData(self):
         data_array = []
-        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 c = hotel(row[0], row[1], row[2],
