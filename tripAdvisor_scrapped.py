@@ -242,6 +242,8 @@ class Ui_sortWindow(object):
         elif button_price == "ssButton_2":
             if x == "Insertion Sort":
                 sorted_array = sort.insert_sort(arr, 1, y)
+            elif x == "Cycle Sort":
+                sorted_array = sort.cycle_sort(arr, 0, y)
             elif x == "Quick Sort":
                 sorted_array = sort.quick_sort(arr, 1, y, 0, q)
             elif x == "Selection Sort":
@@ -374,15 +376,6 @@ class Ui_sortWindow(object):
 
 
 class sorting:
-    def get_indices(self, sorted_array, unsorted_array, value):
-        indices = []
-        for i in range(0, len(sorted_array)):
-            sorted_value = sorted_array[i].name
-            for j in range(0, len(unsorted_array)):
-                if sorted_value == unsorted_array[j].name:
-                    indices.append(j)
-        return indices
-
     def insert_sort(self, arr, col, type):
         if type == "Ascending":
             n = len(arr)
@@ -394,7 +387,7 @@ class sorting:
                     arr[j+1] = arr[j]
                     j = j-1
                 arr[j+1] = keys
-        else:
+        elif type=="Descending":
             n = len(arr)
             for i in range(1, n):
                 key = arr[i].array_list[col]
@@ -404,7 +397,6 @@ class sorting:
                     arr[j+1] = arr[j]
                     j = j-1
                 arr[j+1] = keys
-     #   array_indices=self.get_indices(arr,indices,value)
         return arr
 
     def selection_sort(self, arr, col, type):
@@ -419,7 +411,7 @@ class sorting:
                     temp = arr[i]
                     arr[i] = arr[minValueIndex]
                     arr[minValueIndex] = temp
-        else:
+        elif type=="Descending":
             n = len(arr)
             for i in range(n-1):
                 minValueIndex = i
@@ -439,37 +431,52 @@ class sorting:
             self.merge_sort(arr, col, type, p, q)
             self.merge_sort(arr, col, type, q+1, r)
             self.merge(arr, col, type, p, q, r)
-        else:
-            return arr
+        # else:
+        #     print(arr[col].array_list)
+        #     return arr
+        return arr
 
-    def merge(self,arr,col, type, p, q, r):
-        #n1 = q-p+1
-        #n2 = r-q
+    def merge(self,arr,col, typee, p, q, r):
         L = []
         R = []
         L1 = []
         R1 = []
-        for i in range(p,q+1):
-            L.append(arr[i])
-            L1.append(arr[i].array_list[col])
-        for j in range(q+1,r+1):
-            R.append(arr[j])
-            R1.append(arr[j].array_list[col])
-        L.append(math.inf)
-        R.append(math.inf)
-        L1.append(math.inf)
-        R1.append(math.inf)
-        i = 0
-        j = 0
-        if type == "Ascending":
+        if typee == "Ascending":
+            for i in range(p,q+1):
+                L.append(arr[i])
+                L1.append(arr[i].array_list[col])
+            for j in range(q+1,r+1):
+                R.append(arr[j])
+                R1.append(arr[j].array_list[col])
+            m=hotel("zzzzzzzzzzzzzz","999999999","zzzzzzzzzz","99999","999999999","zzzzzzzzz","#99999999")
+            L.append(m)
+            R.append(m)
+            L1.append(m.array_list[col])
+            R1.append(m.array_list[col])
+            i = 0
+            j = 0
             for k in range(p, r+1):
-                if L1[i] <= R1[j]:
+                if (L1[i]) <= (R1[j]):
                     arr[k] = L[i]
                     i += 1
                 else:
                     arr[k] = R[j]
                     j += 1
-        else:
+        elif typee=="Descending":
+            for i in range(p,q+1):
+                L.append(arr[i])
+                L1.append(arr[i].array_list[col])
+            for j in range(q+1,r+1):
+                R.append(arr[j])
+                R1.append(arr[j].array_list[col])
+            m=hotel("aaaaaaaaaaaaa","0","aaaaaaaaa","0","0","aaaaaaaaaa","#0")
+            L.append(m)
+            R.append(m)
+            L1.append(m.array_list[col])
+            R1.append(m.array_list[col])
+            i = 0
+            j = 0
+            
             for k in range(p, r+1):
                 if L1[i] >= R1[j]:
                     arr[k] = L[i]
@@ -494,7 +501,7 @@ class sorting:
                     i +=1
                     (arr[i], arr[j]) = (arr[j], arr[i])
             (arr[i+1], arr[r]) = (arr[r], arr[i+1])
-        else:
+        elif type=="Descending":
             for j in range(p,r):
                 if (arr[j].array_list[col] > pivot_1):  
                     i +=1
@@ -516,7 +523,7 @@ class sorting:
                         j -= interval
                     arr[j] = keys
                 interval //= 2
-        else:
+        elif type=="Descending":
             while interval > 0:
                 for i in range(interval, n):
                     key = arr[i].array_list[col]
@@ -537,7 +544,7 @@ class sorting:
                         temp = arr[j]
                         arr[j] = arr[j+1]
                         arr[j+1] = temp
-        else:
+        elif type=="Descending":
             for i in range(len(arr)-1):
                 for j in range(len(arr) - 1):
                     if arr[j].array_list[col] < arr[j+1].array_list[col]:
@@ -568,7 +575,7 @@ class sorting:
             if largest != i:
                 arr[i], arr[largest] = arr[largest], arr[i]
                 self.heapify(arr, col, type, n, largest)
-        else:
+        elif type=="Descending":
             if left < n and arr[left].array_list[col] < arr[smallest].array_list[col]:
                 smallest = left
             if right < n and arr[right].array_list[col] < arr[smallest].array_list[col]:
@@ -667,34 +674,34 @@ class Ui_MainWindow(object):
         self.pushButton_4.setGeometry(QtCore.QRect(770, 180, 61, 23))
         self.pushButton_4.setObjectName("pushButton_4")
         self.ssButton = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton.setGeometry(QtCore.QRect(40, 30, 21, 21))
+        self.ssButton.setGeometry(QtCore.QRect(65, 36, 21, 21))
         self.ssButton.setObjectName("ssButton")
         self.ssButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_2.setGeometry(QtCore.QRect(150, 30, 21, 21))
+        self.ssButton_2.setGeometry(QtCore.QRect(175, 36, 21, 21))
         self.ssButton_2.setObjectName("ssButton_2")
         self.ssButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_3.setGeometry(QtCore.QRect(240, 30, 21, 20))
+        self.ssButton_3.setGeometry(QtCore.QRect(270, 36, 21, 20))
         self.ssButton_3.setObjectName("ssButton_3")
         self.ssButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_4.setGeometry(QtCore.QRect(326, 36, 20, 20))
+        self.ssButton_4.setGeometry(QtCore.QRect(370, 36, 20, 20))
         self.ssButton_4.setObjectName("ssButton_4")
         self.ssButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_5.setGeometry(QtCore.QRect(460, 30, 21, 21))
+        self.ssButton_5.setGeometry(QtCore.QRect(470, 36, 21, 21))
         self.ssButton_5.setObjectName("ssButton_5")
         self.ssButton_6 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_6.setGeometry(QtCore.QRect(530, 30, 21, 21))
+        self.ssButton_6.setGeometry(QtCore.QRect(580, 36, 21, 21))
         self.ssButton_6.setObjectName("ssButton_6")
         self.ssButton_7 = QtWidgets.QPushButton(self.centralwidget)
-        self.ssButton_7.setGeometry(QtCore.QRect(630, 30, 20, 20))
+        self.ssButton_7.setGeometry(QtCore.QRect(680, 36, 20, 20))
         self.ssButton_7.setObjectName("ssButton_7")
         self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(70, 30, 21, 21))
+        self.pushButton_5.setGeometry(QtCore.QRect(100, 36, 21, 21))
         self.pushButton_5.setObjectName("pushButton_5")
         self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_6.setGeometry(QtCore.QRect(270, 30, 21, 21))
+        self.pushButton_6.setGeometry(QtCore.QRect(300, 36, 21, 21))
         self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_7.setGeometry(QtCore.QRect(560, 30, 21, 21))
+        self.pushButton_7.setGeometry(QtCore.QRect(610, 36, 21, 21))
         self.pushButton_7.setObjectName("pushButton_7")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -850,8 +857,8 @@ class Ui_MainWindow(object):
 
     def getdata(self):
         data_array = []
-        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-            # with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+       # with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 data_array.append(row)
@@ -859,8 +866,8 @@ class Ui_MainWindow(object):
 
     def getClassicData(self):
         data_array = []
-        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-            # with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+       # with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 c = hotel(row[0], row[1], row[2],
@@ -871,8 +878,13 @@ class Ui_MainWindow(object):
     def loaddata(self, data_array):
         row = 0
         for i in data_array:
-            data = [{"Name": i[0], "Price":i[1], "City":i[2],
-                     "Rating":i[3], "Reviews":i[4], "Services":i[5], "Ranking":i[6]}]
+            data = [{"Name": i[0],
+                     "Price":i[1],
+                     "City":i[2],
+                     "Rating":i[3],
+                     "Reviews":i[4],
+                     "Services":i[5],
+                     "Ranking":i[6]}]
             self.tableWidget.setRowCount(len(data_array))
             for person in data:
                 self.tableWidget.setItem(
