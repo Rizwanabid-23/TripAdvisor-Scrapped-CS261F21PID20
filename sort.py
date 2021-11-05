@@ -1,7 +1,4 @@
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-
 class Ui_sortWindow(object):
     def setupUi(self, sortWindow):
         sortWindow.setObjectName("sortWindow")

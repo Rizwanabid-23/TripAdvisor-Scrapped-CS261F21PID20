@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from os import name
+import PyQt5
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -8,7 +9,7 @@ import csv
 import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QHBoxLayout, QPushButton, QProgressBar, QWidget
 from sort import Ui_sortWindow
 from filter import Ui_filterWindow
@@ -21,6 +22,7 @@ button_ranking = ""
 button_rating = ""
 button_review = ""
 button_services = ""
+
 class hotel:
     array_list = []
 
@@ -31,6 +33,8 @@ class hotel:
 
 class WorkerThread(QThread):
     def run(self):
+        value=0
+        p_bar=Ui_MainWindow()
         QApplication.processEvents()
         driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
         #driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
@@ -62,6 +66,8 @@ class WorkerThread(QThread):
             for j in range(0, len(categories)):
                 k = 0
                 for i in range(1, 11):
+                    p_bar.prog_bar(value)
+                    value= value+1.88
                     driver.get("https://www.tripadvisor.com/Hotels-" +
                                str(categories[j]) + "-oa" + str(k) + str(categories_2[j]))
                     k += 30
@@ -271,8 +277,6 @@ class Ui_sortWindow(object):
                 searched_array = search.binary_search(arr_1, 6, y_1,0,q_1)
         print("==")
         return searched_array
-
-
         
     def call_method(self):
         x = self.sort_alogrithms.currentText()
@@ -729,10 +733,12 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(790, 340, 191, 23))
-        self.progressBar.setProperty("value", 24)
         self.progressBar.setObjectName("progressBar")
+        self.progressBar.setGeometry(QtCore.QRect(790, 340, 191, 23))
+        self.progressBar.setProperty("value", 0)
+        
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(790, 410, 91, 16))
         font = QtGui.QFont()
@@ -812,16 +818,15 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         data = self.getdata()
         self.loaddata(data)
-    # def prog_bar(self,value):
-        # self.bar = QProgressBar(self)
-        # print(value)
-        # self.bar.setObjectName("progressBar")
-        # self.bar.setGeometry(790, 440, 191, 23)
-        # self.bar.setValue(value)
-        # self.bar.show()
-        # .p_bar.setObjectName("progressBar")
-        #self.p_bar.setGeometry(790, 440, 191, 23)
-        # self.p_bar.setValue(value)
+    def prog_bar(self,value):
+        print("======")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar.setObjectName("progressBar")
+        self.progressBar.setGeometry(QtCore.QRect(790, 340, 191, 23))
+        self.progressBar.setProperty("value", value)
+        
 
     def name_column(self, col):
         row = 0
