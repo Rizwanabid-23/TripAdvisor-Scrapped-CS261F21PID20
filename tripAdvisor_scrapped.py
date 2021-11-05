@@ -5,6 +5,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
 import math
+import time
 import csv
 import sys
 from PyQt5.uic import loadUi
@@ -15,6 +16,9 @@ from sort import Ui_sortWindow
 from filter import Ui_filterWindow
 stop_window = True
 pause = False
+real_button_name = ""
+real_button_city = ""
+real_button_services = ""
 button_name = ""
 button_price = ""
 button_city = ""
@@ -36,8 +40,8 @@ class WorkerThread(QThread):
         value=0
         p_bar=Ui_MainWindow()
         QApplication.processEvents()
-        driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
-        #driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
+        #driver = webdriver.Chrome(executable_path='C:\\Users\\rizwa\\Downloads\\chromedriver_win32\\chromedriver.exe')
+        driver = webdriver.Chrome(executable_path='D:\\Driver\\chromedriver.exe')
         driver.get("https://www.tripadvisor.com/Hotels")
         content = driver.page_source
         soup = BeautifulSoup(content)
@@ -136,6 +140,81 @@ class WorkerThread(QThread):
                         break
                 if stop_window == False:
                     break
+class Ui_filterWindow(object):
+    def setupUi(self, filterWindow,ui_window):
+        self.ui_window = ui_window
+        ui_window.set_filter_window(self)
+        filterWindow.setObjectName("filterWindow")
+        filterWindow.resize(260, 241)
+        self.centralwidget = QtWidgets.QWidget(filterWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(20, 10, 131, 16))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(20, 80, 131, 16))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(80, 150, 75, 23))
+        self.pushButton.setObjectName("pushButton")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(40, 40, 141, 20))
+        self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setGeometry(QtCore.QRect(40, 110, 141, 20))
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        filterWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(filterWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 260, 21))
+        self.menubar.setObjectName("menubar")
+        filterWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(filterWindow)
+        self.statusbar.setObjectName("statusbar")
+        filterWindow.setStatusBar(self.statusbar)
+        self.pushButton.clicked.connect(self.real_caller_name)
+        self.retranslateUi(filterWindow)
+        QtCore.QMetaObject.connectSlotsByName(filterWindow)
+
+    def real_caller_name(self):
+        if real_button_name == "pushButton_5":
+            self.ui_window.real_name_column(0)
+        elif real_button_city == "pushButton_6":
+            self.ui_window.real_name_column(2)
+        elif real_button_services == "pushButton_7":
+            self.ui_window.real_name_column(5)
+    def real_call_method(self):
+        real_start = self.lineEdit.text()
+        real_end = self.lineEdit_2.text()
+        real_filter = get_filter() 
+        arr_1 = self.ui_window.getClassicData()
+        if real_button_name == "pushButtton_5":
+            data_array = real_filter.filter_func(arr_1, 0,real_start,real_end)
+        elif real_button_city == "pushButtton_6":
+            data_array = real_filter.filter_func(arr_1, 2,real_start,real_end)
+        elif real_button_services == "pushButtton_7":
+            data_array = real_filter.filter_func(arr_1, 5,real_start,real_end)
+        
+        return data_array
+    
+    def retranslateUi(self, filterWindow):
+        _translate = QtCore.QCoreApplication.translate
+        filterWindow.setWindowTitle(_translate("filterWindow", "MainWindow"))
+        self.label.setText(_translate("filterWindow", "Show items starting with:"))
+        self.label_2.setText(_translate("filterWindow", "Show items ending  with:"))
+        self.pushButton.setText(_translate("filterWindow", "Search"))
+
 
 
 class Ui_sortWindow(object):
@@ -243,8 +322,6 @@ class Ui_sortWindow(object):
                 searched_array = search.linear_search(arr_1, 0, y_1)
             elif x_1 == "Binary Search":
                 searched_array = search.binary_search(arr_1, 0, y_1,0,q_1)
-            elif x_1 == "Jump Search":
-                searched_array = search.jump_search(arr_1, 0, y_1)
         elif button_price == "ssButton_2":
             if x_1 == "Linear Search":
                 searched_array = search.linear_search(arr_1, 1, y_1)
@@ -286,114 +363,218 @@ class Ui_sortWindow(object):
         q = len(arr) - 1
         if button_name == "ssButton":
             if x == "Insertion Sort":
+                start = time.time()
                 sorted_array = sort.insert_sort(arr, 0, y)
+                end = time.time()
             elif x == "Selection Sort":
+                start = time.time()
                 sorted_array = sort.selection_sort(arr, 0, y)
+                end = time.time()
             elif x == "Merge Sort":
+                start = time.time()
                 sorted_array = sort.merge_sort(arr, 0, y, 0, q)
+                end = time.time()
             elif x == "Shell Sort":
+                start = time.time()
                 sorted_array = sort.shell_sort(arr, 0, y)
+                end = time.time()
             elif x == "Bubble Sort":
+                start = time.time()
                 sorted_array = sort.bubble_sort(arr, 0, y)
+                end = time.time()
             elif x == "Heap Sort":
+                start = time.time()
                 sorted_array = sort.heap_sort(arr, 0, y)
+                end = time.time()
             elif x == "Cycle Sort":
+                start = time.time()
                 sorted_array = sort.cycle_sort(arr, 0, y)
+                end = time.time()
             elif x == "Quick Sort":
+                start = time.time()
                 sorted_array = sort.quick_sort(arr, 0, y, 0, q)
+                end = time.time()
         elif button_price == "ssButton_2":
             if x == "Insertion Sort":
+                start = time.time()
                 sorted_array = sort.insert_sort(arr, 1, y)
+                end = time.time()
             elif x == "Cycle Sort":
+                start = time.time()
                 sorted_array = sort.cycle_sort(arr, 0, y)
+                end = time.time()
             elif x == "Quick Sort":
+                start = time.time()
                 sorted_array = sort.quick_sort(arr, 1, y, 0, q)
+                end = time.time()
             elif x == "Selection Sort":
+                start = time.time()
                 sorted_array = sort.selection_sort(arr, 1, y)
+                end = time.time()
             elif x == "Merge Sort":
+                start = time.time()
                 sorted_array = sort.merge_sort(arr, 1, y, 0, q)
+                end = time.time()
             elif x == "Shell Sort":
+                start = time.time()
                 sorted_array = sort.shell_sort(arr, 1, y)
+                end = time.time()
             elif x == "Bubble Sort":
+                start = time.time()
                 sorted_array = sort.bubble_sort(arr, 1, y)
+                end = time.time()
             elif x == "Heap Sort":
+                start = time.time()
                 sorted_array = sort.heap_sort(arr, 1, y)
+                end = time.time()
         elif button_city == "ssButton_3":
             if x == "Insertion Sort":
+                start = time.time()
                 sorted_array = sort.insert_sort(arr, 2, y)
+                end = time.time()
             elif x == "Quick Sort":
+                start = time.time()
                 sorted_array = sort.quick_sort(arr, 2, y, 0, q)
+                end = time.time()
             elif x == "Selection Sort":
+                start = time.time()
                 sorted_array = sort.selection_sort(arr, 2, y)
+                end = time.time()
             elif x == "Merge Sort":
+                start = time.time()
                 sorted_array = sort.merge_sort(arr, 2, y, 0, q)
+                end = time.time()
             elif x == "Shell Sort":
+                start = time.time()
                 sorted_array = sort.shell_sort(arr, 2, y)
+                end = time.time()
             elif x == "Bubble Sort":
+                start = time.time()
                 sorted_array = sort.bubble_sort(arr, 2, y)
+                end = time.time()
             elif x == "Heap Sort":
+                start = time.time()
                 sorted_array = sort.heap_sort(arr, 2, y)
+                end = time.time()
         elif button_rating == "ssButton_4":
             if x == "Insertion Sort":
+                start = time.time()
                 sorted_array = sort.insert_sort(arr, 3, y)
+                end = time.time()
             elif x == "Quick Sort":
+                start = time.time()
                 sorted_array = sort.quick_sort(arr, 3, y, 0, q)
+                end = time.time()
             elif x == "Selection Sort":
+                start = time.time()
                 sorted_array = sort.selection_sort(arr, 3, y)
+                end = time.time()
             elif x == "Merge Sort":
+                start = time.time()
                 sorted_array = sort.merge_sort(arr, 3, y, 0, q)
+                end = time.time()
             elif x == "Shell Sort":
+                start = time.time()
                 sorted_array = sort.shell_sort(arr, 3, y)
+                end = time.time()
             elif x == "Bubble Sort":
+                start = time.time()
                 sorted_array = sort.bubble_sort(arr, 3, y)
+                end = time.time()
             elif x == "Heap Sort":
+                start = time.time()
                 sorted_array = sort.heap_sort(arr, 3, y)
+                end = time.time()
         elif button_review == "ssButton_5":
             if x == "Insertion Sort":
+                start = time.time()
                 sorted_array = sort.insert_sort(arr, 4, y)
+                end = time.time()
             elif x == "Quick Sort":
+                start = time.time()
                 sorted_array = sort.quick_sort(arr, 4, y, 0, q)
+                end = time.time()
             elif x == "Selection Sort":
+                start = time.time()
                 sorted_array = sort.selection_sort(arr, 4, y)
+                end = time.time()
             elif x == "Merge Sort":
+                start = time.time()
                 sorted_array = sort.merge_sort(arr, 4, y, 0, q)
+                end = time.time()
             elif x == "Shell Sort":
+                start = time.time()
                 sorted_array = sort.shell_sort(arr, 4, y)
+                end = time.time()
             elif x == "Bubble Sort":
+                start = time.time()
                 sorted_array = sort.bubble_sort(arr, 4, y)
+                end = time.time()
             elif x == "Heap Sort":
+                start = time.time()
                 sorted_array = sort.heap_sort(arr, 4, y)
+                end = time.time()
         elif button_services == "ssButton_6":
             if x == "Insertion Sort":
+                start = time.time()
                 sorted_array = sort.insert_sort(arr, 5, y)
+                end = time.time()
             elif x == "Quick Sort":
+                start = time.time()
                 sorted_array = sort.quick_sort(arr, 5, y, 0, q)
+                end = time.time()
             elif x == "Selection Sort":
+                start = time.time()
                 sorted_array = sort.selection_sort(arr, 5, y)
+                end = time.time()
             elif x == "Merge Sort":
+                start = time.time()
                 sorted_array = sort.merge_sort(arr, 5, y, 0, q)
+                end = time.time()
             elif x == "Shell Sort":
+                start = time.time()
                 sorted_array = sort.shell_sort(arr, 5, y)
+                end = time.time()
             elif x == "Bubble Sort":
+                start = time.time()
                 sorted_array = sort.bubble_sort(arr, 5, y)
+                end = time.time()
             elif x == "Heap Sort":
+                start = time.time()
                 sorted_array = sort.heap_sort(arr, 5, y)
+                end = time.time()
         elif button_ranking == "ssButton_7":
             if x == "Insertion Sort":
+                start = time.time()
                 sorted_array = sort.insert_sort(arr, 6, y)
+                end = time.time()
             elif x == "Quick Sort":
+                start = time.time()
                 sorted_array = sort.quick_sort(arr, 6, y, 0, q)
+                end = time.time()
             elif x == "Selection Sort":
+                start = time.time()
                 sorted_array = sort.selection_sort(arr, 6, y)
+                end = time.time()
             elif x == "Merge Sort":
+                start = time.time()
                 sorted_array = sort.merge_sort(arr, 6, y, 0, q)
+                end = time.time()
             elif x == "Shell Sort":
+                start = time.time()
                 sorted_array = sort.shell_sort(arr, 6, y)
+                end = time.time()
             elif x == "Bubble Sort":
+                start = time.time()
                 sorted_array = sort.bubble_sort(arr, 6, y)
+                end = time.time()
             elif x == "Heap Sort":
+                start = time.time()
                 sorted_array = sort.heap_sort(arr, 6, y)
+                end = time.time()
         print("==")
+        total = end - start
+        print(str(total))
         return sorted_array
 
     def retranslateUi(self, sortWindow):
@@ -435,7 +616,24 @@ class Ui_sortWindow(object):
         self.comboBox_2.setItemText(3, _translate("sortWindow", "Jump Search"))
         self.pushButton.setText(_translate("sortWindow", "Sort"))
         self.pushButton_2.setText(_translate("sortWindow", "Search"))
-
+class get_filter:
+    def filter_func(self, arr, col,start,end):
+        k=0
+        arr2 = []
+        real_arr = arr.array_list[col]
+        len_start=len(start)
+        for i in real_arr:
+            i_len=len(i)
+            for j in i:
+                if k!=len(start):
+                    if j==start[k] and start[0]==i[0]: 
+                        k+=1
+                    else:
+                        k=0
+                if k==len(start):
+                    arr2.append(i)
+                    k=0
+        return arr2
 class searching:
     def linear_search(self, arr, col,find_element):
         get_element = []
@@ -539,7 +737,7 @@ class sorting:
             i = 0
             j = 0
             for k in range(p, r+1):
-                if (L1[i]) <= (R1[j]):
+                if L1[i] <= R1[j]:
                     arr[k] = L[i]
                     i += 1
                 else:
@@ -559,7 +757,6 @@ class sorting:
             R1.append(m.array_list[col])
             i = 0
             j = 0
-            
             for k in range(p, r+1):
                 if L1[i] >= R1[j]:
                     arr[k] = L[i]
@@ -698,7 +895,8 @@ class sorting:
 class Ui_MainWindow(object):
     def set_sort_window(self, sort_window):
         self.sort_window = sort_window
-
+    def set_filter_window(self, filter_window):
+        self.filter_window = filter_window
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1000, 525)
@@ -740,7 +938,8 @@ class Ui_MainWindow(object):
         self.progressBar.setProperty("value", 0)
         
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(790, 410, 91, 16))
+        self.label_2.setGeometry(QtCore.QRect(790, 410, 200, 16))
+        
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -804,8 +1003,8 @@ class Ui_MainWindow(object):
         self.pushButton_2.clicked.connect(self.pause_window)
         self.pushButton_4.clicked.connect(self.resume_window)
         self.pushButton_5.clicked.connect(self.searchWindow_1)
-        self.pushButton_6.clicked.connect(self.searchWindow_1)
-        self.pushButton_7.clicked.connect(self.searchWindow_1)
+        self.pushButton_6.clicked.connect(self.searchWindow_2)
+        self.pushButton_7.clicked.connect(self.searchWindow_3)
         self.ssButton.clicked.connect(self.sortedWindow_1)
         self.ssButton_2.clicked.connect(self.sortedWindow_2)
         self.ssButton_3.clicked.connect(self.sortedWindow_3)
@@ -875,6 +1074,31 @@ class Ui_MainWindow(object):
                 self.tableWidget.setItem(
                     row, 6, QtWidgets.QTableWidgetItem(person["Ranking"]))
             row += 1
+    def real_name_column(self, col):
+        row = 0
+        arr_2 = self.filter_window.real_call_method()
+        print(arr_2)
+        self.tableWidget.setRowCount(len(arr_2))
+        for i in arr_2:
+            data = [{"Name": i.array_list[0], "Price":i.array_list[1], "City":i.array_list[2],
+                    "Rating":i.array_list[3], "Reviews":i.array_list[4], "Services":i.array_list[5], "Ranking":i.array_list[6]}]
+            for person in data:
+                self.tableWidget.setItem(
+                    row, 0, QtWidgets.QTableWidgetItem(person["Name"]))
+                self.tableWidget.setItem(
+                    row, 1, QtWidgets.QTableWidgetItem(person["Price"]))
+                self.tableWidget.setItem(
+                    row, 2, QtWidgets.QTableWidgetItem(person["City"]))
+                self.tableWidget.setItem(
+                    row, 3, QtWidgets.QTableWidgetItem(person["Rating"]))
+                self.tableWidget.setItem(
+                    row, 4, QtWidgets.QTableWidgetItem(person["Reviews"]))
+                self.tableWidget.setItem(
+                    row, 5, QtWidgets.QTableWidgetItem(person["Services"]))
+                self.tableWidget.setItem(
+                    row, 6, QtWidgets.QTableWidgetItem(person["Ranking"]))
+            row += 1
+            
     def clicker(self):
         global stop_window
         stop_window = True
@@ -958,14 +1182,32 @@ class Ui_MainWindow(object):
 
     def searchWindow_1(self):
         self.filterWindow = QtWidgets.QMainWindow()
+        global real_button_name
+        real_button_name = self.pushButton_5.objectName()
+        print(real_button_name)
         self.ui = Ui_filterWindow()
-        self.ui.setupUi(self.filterWindow)
+        self.ui.setupUi(self.filterWindow, self)
         self.filterWindow.show()
-
+    def searchWindow_2(self):
+        self.filterWindow = QtWidgets.QMainWindow()
+        global real_button_city
+        real_button_city = self.pushButton_6.objectName()
+        print(real_button_city)
+        self.ui = Ui_filterWindow()
+        self.ui.setupUi(self.filterWindow, self)
+        self.filterWindow.show()
+    def searchWindow_3(self):
+        self.filterWindow = QtWidgets.QMainWindow()
+        global real_button_services
+        real_button_services = self.pushButton_7.objectName()
+        print(real_button_services)
+        self.ui = Ui_filterWindow()
+        self.ui.setupUi(self.filterWindow, self)
+        self.filterWindow.show()    
     def getdata(self):
         data_array = []
-        #with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 data_array.append(row)
@@ -973,8 +1215,8 @@ class Ui_MainWindow(object):
 
     def getClassicData(self):
         data_array = []
-        #with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
-        with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        with open("C:\\Users\\Asad Mehmood\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
+        #with open("C:\\Users\\rizwa\\Documents\\GitHub\\CS261F21PID20\\hotels.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 c = hotel(row[0], row[1], row[2],
