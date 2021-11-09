@@ -199,11 +199,11 @@ class Ui_filterWindow(object):
         real_end = self.lineEdit_2.text()
         real_filter = get_filter() 
         arr_1 = self.ui_window.getClassicData()
-        if real_button_name == "pushButtton_5":
+        if real_button_name == "pushButton_5":
             data_array = real_filter.filter_func(arr_1, 0,real_start,real_end)
-        elif real_button_city == "pushButtton_6":
+        elif real_button_city == "pushButton_6":
             data_array = real_filter.filter_func(arr_1, 2,real_start,real_end)
-        elif real_button_services == "pushButtton_7":
+        elif real_button_services == "pushButton_7":
             data_array = real_filter.filter_func(arr_1, 5,real_start,real_end)
         
         return data_array
